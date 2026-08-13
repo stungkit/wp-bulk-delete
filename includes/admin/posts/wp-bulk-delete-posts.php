@@ -11,7 +11,8 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$post_by_tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'by_posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.Security.NonceVerification.Recommended
+$post_by_tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) : 'by_posts';
 ?>
 <form method="post" id="delete_posts_form" class="wpbd-delete-form">
     <div class="form-table">
@@ -19,34 +20,42 @@ $post_by_tab = isset( $_GET['tab'] ) ? esc_attr( sanitize_text_field( wp_unslash
         <?php
         if ( 'by_posts' == $post_by_tab ){
 
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_by_posttype' );
 
         } elseif ( 'by_comments' == $post_by_tab ){
             
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_by_author' );
 
         } elseif ( 'by_users' == $post_by_tab ){
             
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_by_title' );
 
         } elseif( 'by_meta_fields' == $post_by_tab ){
             
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_by_taxonomy' );
 
         } elseif( 'by_terms' == $post_by_tab ){
             
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_general' );
 
         } elseif( 'by_cleanup' == $post_by_tab ){
             
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_general' );
 
         } elseif( 'by_support_help' == $post_by_tab ){
             
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_general' );
 
         } elseif( 'by_schedule-delete' == $post_by_tab ){
 
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
             do_action( 'render_form_by_custom_fields' );
 
         }

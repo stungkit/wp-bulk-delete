@@ -50,6 +50,7 @@ add_action( 'admin_menu', 'wpbd_add_menu_pages', 10 );
  * @since 1.2
  * @return void
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function get_selected_tab_submenu( $submenu_file ){
 	if( !empty( $_GET['page'] ) && esc_attr( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) == 'delete_all_actions' ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$allowed_tabs = array( 'by_posts', 'by_comments', 'by_users', 'by_terms', 'by_cleanup', 'by_support_help', 'by_schedule-delete', 'by_schedule-delete-history', 'wpbdpro-license' );
@@ -67,6 +68,7 @@ function get_selected_tab_submenu( $submenu_file ){
 add_filter( 'submenu_file', 'get_selected_tab_submenu' );
 
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function add_wpbd_wca_menu_free() {
 	global $submenu;
 	if( !wpbd_is_pro() ) {

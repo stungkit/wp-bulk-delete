@@ -23,6 +23,7 @@ add_action( 'wpbd_delete_terms_form', 'wpbd_render_delete_terms_taxonomy' );
  * @param array $data Form post Data.
  * @return array | posts ID to be delete.
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function xt_delete_terms_form_process( $data ) {
 	$error = array();
     if ( ! current_user_can( 'manage_options' ) ) {

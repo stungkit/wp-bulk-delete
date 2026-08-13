@@ -29,6 +29,7 @@ add_action( 'wpbd_delete_comments_form', 'wpdb_render_delete_comments_limit' );
  * @param array $data Form post Data.
  * @return array | posts ID to be delete.
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function xt_delete_comments_form_process( $data ) {
 	$error = array();
     if ( ! current_user_can( 'manage_options' ) ) {

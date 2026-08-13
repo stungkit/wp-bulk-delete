@@ -158,6 +158,7 @@ endif; // End If class exists check.
  * @since 1.0.0
  * @return object|WP_Bulk_Delete The one true WP_Bulk_Delete Instance.
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function wpbulkdelete() {
 	return WP_Bulk_Delete::instance();
 }
