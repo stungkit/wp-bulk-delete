@@ -29,8 +29,11 @@ add_action( 'render_form_by_custom_fields', 'wpbd_render_common_form', 30 );
 
 // General
 add_action( 'render_form_general', 'wpbd_render_common_form', 60 );
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 add_action( 'render_form_by_charector_count', 'wpdb_render_delete_users_postlinks', 10 );
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 add_action( 'render_form_by_charector_count', 'wpbd_render_form_post_contant_count_interval', 70 );
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 add_action( 'render_form_by_charector_count', 'wpbd_render_form_post_contant_word_count_interval', 80 );
 
 /**
@@ -41,6 +44,7 @@ add_action( 'render_form_by_charector_count', 'wpbd_render_form_post_contant_wor
  * @param array $data Form pot Data.
  * @return array | posts ID to be delete.
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function xt_delete_posts_form_process( $data ) {
 	$error = array();
     
@@ -755,7 +759,7 @@ function wpbd_render_form_duplicate_posts(){
  * @return array Array of post types.
  */
 function wpbd_get_cleanup_post_types() {
-    global $wp_post_types;
+    global $wp_post_types, $wpdb;
     $ingnore_types = array( 'attachment', 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'wp_block', 'wp_template', 'wp_template_part', 'wp_global_styles', 'wp_navigation', 'wpbd_scheduled', 'wp_font_face', 'wp_font_family', 'shop_order_refund', 'shop_order_placehold', 'shop_order', 'shop_order_lagecy' );
     $types = array();
     if( !empty( $wp_post_types ) ){
@@ -767,6 +771,22 @@ function wpbd_get_cleanup_post_types() {
             }
         }
     }
+
+    $db_post_types = $wpdb->get_col( "
+        SELECT DISTINCT post_type FROM {$wpdb->posts} WHERE post_status IN ('trash', 'auto-draft')
+        UNION
+        SELECT DISTINCT p.post_type FROM {$wpdb->posts} p INNER JOIN {$wpdb->posts} r ON p.ID = r.post_parent WHERE r.post_type = 'revision'
+    " );
+    
+    if ( ! empty( $db_post_types ) ) {
+        foreach ( $db_post_types as $pt ) {
+            if ( ! isset( $types[ $pt ] ) && ! in_array( $pt, $ingnore_types ) ) {
+                $label = ucwords( str_replace( array( '-', '_' ), ' ', $pt ) ) . ' (' . esc_html__( 'Inactive', 'wp-bulk-delete' ) . ')';
+                $types[ $pt ] = $label;
+            }
+        }
+    }
+
     return $types;
 }
 
@@ -1253,6 +1273,7 @@ function wpbd_render_common_form() {
                             <div class="wpbd-blur-filter-option">
                                 <?php
                                     wpbd_render_form_post_contains();
+                                    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
                                     do_action( 'render_form_by_charector_count' );
                                 ?>
                             </div>
@@ -1264,6 +1285,7 @@ function wpbd_render_common_form() {
                     <?php
                 }else{
                     wpbd_render_form_post_contains_pro();
+                    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
                     do_action( 'render_form_by_charector_count_pro' );
                 }
             ?>

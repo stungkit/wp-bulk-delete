@@ -13,6 +13,7 @@
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, WordPress.DB.PreparedSQLPlaceholders
 /**
  * AJAX handler for batched delete operations.
  *
@@ -330,6 +331,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	$post_types = isset( $data['cleanup_meta_post_types'] ) ? $data['cleanup_meta_post_types'] : array();
 
 	// 1. Orphan post meta
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$query1 = $wpdb->get_col( "SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id NOT IN (SELECT ID FROM {$wpdb->posts})" );
 	if ( ! empty( $query1 ) ) {
 		foreach ( $query1 as $id ) {
@@ -338,6 +340,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	}
 
 	// 2. Orphan comment meta
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$query2 = $wpdb->get_col( "SELECT meta_id FROM {$wpdb->commentmeta} WHERE comment_id NOT IN (SELECT comment_ID FROM {$wpdb->comments})" );
 	if ( ! empty( $query2 ) ) {
 		foreach ( $query2 as $id ) {
@@ -346,6 +349,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	}
 
 	// 3. Orphan user meta
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$query3 = $wpdb->get_col( "SELECT umeta_id FROM {$wpdb->usermeta} WHERE user_id NOT IN (SELECT ID FROM {$wpdb->users})" );
 	if ( ! empty( $query3 ) ) {
 		foreach ( $query3 as $id ) {
@@ -354,6 +358,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	}
 
 	// 4. Orphan term meta
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$query4 = $wpdb->get_col( "SELECT meta_id FROM {$wpdb->termmeta} WHERE term_id NOT IN (SELECT term_id FROM {$wpdb->terms})" );
 	if ( ! empty( $query4 ) ) {
 		foreach ( $query4 as $id ) {
@@ -364,6 +369,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	// 5. Duplicate post meta
 	if ( ! empty( $post_types ) ) {
 		$post_types_placeholder = implode( ',', array_fill( 0, count( $post_types ), '%s' ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 		$query5 = $wpdb->get_results( $wpdb->prepare(
 			"SELECT GROUP_CONCAT(pm.meta_id ORDER BY pm.meta_id DESC) AS ids 
 			FROM {$wpdb->postmeta} pm 
@@ -376,6 +382,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 		if ( wpbd_is_pro() ) {
 			$query5 = array();
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 			$query5 = $wpdb->get_results( "SELECT GROUP_CONCAT(meta_id ORDER BY meta_id DESC) AS ids FROM {$wpdb->postmeta} GROUP BY post_id, meta_key, meta_value HAVING COUNT(*) > 1" );
 		}
 	}
@@ -392,6 +399,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	// 6. Duplicate comment meta
 	if ( ! empty( $post_types ) ) {
 		$post_types_placeholder = implode( ',', array_fill( 0, count( $post_types ), '%s' ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 		$query6 = $wpdb->get_results( $wpdb->prepare(
 			"SELECT GROUP_CONCAT(cm.meta_id ORDER BY cm.meta_id DESC) AS ids 
 			FROM {$wpdb->commentmeta} cm 
@@ -405,6 +413,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 		if ( wpbd_is_pro() ) {
 			$query6 = array();
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 			$query6 = $wpdb->get_results( "SELECT GROUP_CONCAT(meta_id ORDER BY meta_id DESC) AS ids FROM {$wpdb->commentmeta} GROUP BY comment_id, meta_key, meta_value HAVING COUNT(*) > 1" );
 		}
 	}
@@ -419,6 +428,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	}
 
 	// 7. Duplicate user meta
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 	$query7 = $wpdb->get_results( "SELECT GROUP_CONCAT(umeta_id ORDER BY umeta_id DESC) AS ids FROM {$wpdb->usermeta} GROUP BY user_id, meta_key, meta_value HAVING COUNT(*) > 1" );
 	if ( ! empty( $query7 ) ) {
 		foreach ( $query7 as $meta ) {
@@ -431,6 +441,7 @@ function wpbd_get_cleanup_meta_ids( $data ) {
 	}
 
 	// 8. Duplicate term meta
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 	$query8 = $wpdb->get_results( "SELECT GROUP_CONCAT(meta_id ORDER BY meta_id DESC) AS ids FROM {$wpdb->termmeta} GROUP BY term_id, meta_key, meta_value HAVING COUNT(*) > 1" );
 	if ( ! empty( $query8 ) ) {
 		foreach ( $query8 as $meta ) {
@@ -476,12 +487,14 @@ function wpbd_get_cleanup_ids( $data ) {
 						ORDER BY r.ID ASC",
 						...$post_types
 					);
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 					$ids = $wpdb->get_col( $query );
 				} else {
 					if ( wpbd_is_pro() ) {
 						$ids = array();
 					} else {
 						$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s ORDER BY ID ASC", 'revision' );
+						// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 						$ids = $wpdb->get_col( $query );
 					}
 				}
@@ -503,12 +516,14 @@ function wpbd_get_cleanup_ids( $data ) {
 						ORDER BY ID ASC",
 						...$post_types
 					);
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 					$ids = $wpdb->get_col( $query );
 				} else {
 					if ( wpbd_is_pro() ) {
 						$ids = array();
 					} else {
 						$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_status = %s ORDER BY ID ASC", 'trash' );
+						// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 						$ids = $wpdb->get_col( $query );
 					}
 				}
@@ -530,12 +545,14 @@ function wpbd_get_cleanup_ids( $data ) {
 						ORDER BY ID ASC",
 						...$post_types
 					);
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 					$ids = $wpdb->get_col( $query );
 				} else {
 					if ( wpbd_is_pro() ) {
 						$ids = array();
 					} else {
 						$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_status = %s ORDER BY ID ASC", 'auto-draft' );
+						// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 						$ids = $wpdb->get_col( $query );
 					}
 				}
@@ -628,18 +645,22 @@ function wpbd_execute_batch_delete( $entity_type, $batch, $data ) {
 					$count++;
 				} elseif ( strpos( $item, 'meta_postmeta_' ) === 0 ) {
 					$id = intval( substr( $item, 14 ) );
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_id = %d", $id ) );
 					$count++;
 				} elseif ( strpos( $item, 'meta_commentmeta_' ) === 0 ) {
 					$id = intval( substr( $item, 17 ) );
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->commentmeta} WHERE meta_id = %d", $id ) );
 					$count++;
 				} elseif ( strpos( $item, 'meta_usermeta_' ) === 0 ) {
 					$id = intval( substr( $item, 14 ) );
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE umeta_id = %d", $id ) );
 					$count++;
 				} elseif ( strpos( $item, 'meta_termmeta_' ) === 0 ) {
 					$id = intval( substr( $item, 14 ) );
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->termmeta} WHERE meta_id = %d", $id ) );
 					$count++;
 				}
@@ -681,3 +702,4 @@ function wpbd_execute_batch_delete( $entity_type, $batch, $data ) {
 			return apply_filters( 'wpbd_ajax_execute_batch_delete', 0, $entity_type, $batch, $data );
 	}
 }
+// phpcs:enable

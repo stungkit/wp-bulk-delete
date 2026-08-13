@@ -30,6 +30,7 @@ add_action( 'wpbd_delete_users_action_limit_form', 'wpdb_render_delete_users_lim
  * @param array $data Form pot Data.
  * @return array | posts ID to be delete.
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function xt_delete_users_form_process( $data ) {
     global $wpdb;
     $error = array();

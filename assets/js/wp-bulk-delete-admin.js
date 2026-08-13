@@ -494,7 +494,11 @@
 							var $input = jQuery(this);
 							var postType = $input.val();
 							var count = counts.revision[postType] || 0;
-							$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							if ( count === 0 ) {
+								$input.closest('label').hide();
+							} else {
+								$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							}
 						});
 
 						// 2. Trash
@@ -502,7 +506,11 @@
 							var $input = jQuery(this);
 							var postType = $input.val();
 							var count = counts.trash[postType] || 0;
-							$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							if ( count === 0 ) {
+								$input.closest('label').hide();
+							} else {
+								$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							}
 						});
 
 						// 3. Auto drafts
@@ -510,7 +518,11 @@
 							var $input = jQuery(this);
 							var postType = $input.val();
 							var count = counts.auto_drafts[postType] || 0;
-							$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							if ( count === 0 ) {
+								$input.closest('label').hide();
+							} else {
+								$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							}
 						});
 
 						// 4. Metadata cleanup
@@ -518,7 +530,11 @@
 							var $input = jQuery(this);
 							var postType = $input.val();
 							var count = counts.meta[postType] || 0;
-							$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							if ( count === 0 ) {
+								$input.closest('label').hide();
+							} else {
+								$input.parent().append(' <span class="cleanup-pt-count" style="color: #666; font-size: 11px;">(' + count + ')</span>');
+							}
 						});
 					}
 				}

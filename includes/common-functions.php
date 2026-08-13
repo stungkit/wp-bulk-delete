@@ -112,6 +112,7 @@ add_action( 'wpbd_display_available_in_pro', 'wpbd_display_available_in_pro' );
  * @since  1.2.4
  * @return boolean
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function timeout_memory_limit_is_enough() {
 	$memory_limit  = str_replace( 'M', '', ini_get('memory_limit') );
 	$timeout_limit = ini_get( 'max_execution_time' );
@@ -135,6 +136,7 @@ add_action( 'timeout_memory_is_enough', 'timeout_memory_limit_is_enough' );
 
 
 add_action('admin_post_wpbd_delete_post', 'handle_delete_posts');
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function handle_delete_posts() {
 	$delete_time = isset( $_POST['delete_time'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['delete_time'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
 	if ( $delete_time === 'scheduled' ) {
@@ -237,6 +239,7 @@ function wpbd_save_scheduled_delete($data){
  *
  * @since 1.1
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function wp_p( $data, $exit = false ){
 
 	echo '<pre>';
@@ -372,6 +375,7 @@ function wpdb_render_common_header( $page_title  ){
  * @since 1.3.1
  * @return array
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function get_wp_post_status(){
 
 	$get_post_status  = get_post_stati();

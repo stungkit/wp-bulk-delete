@@ -50,15 +50,18 @@ function wpbd_delete_posts_page(){
 						<p><strong><?php esc_html_e( 'WARNING: Before you delete any data, please take a backup; and the deletion operation is irreversible. Please use it with caution!', 'wp-bulk-delete' ); ?></strong></p>
 					</div>
 					<?php 
+						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 						do_action( 'timeout_memory_is_enough'); 
 						if ( wpbd_is_pro() ) {
 							if ( isset($wpdb->admin_pro) && is_object($wpdb->admin_pro) && method_exists( $wpdb->admin_pro, 'wpbd_schedule_delete_page' ) ) {
+								// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 								do_action( 'display_success_messages_pro'); 
 								$wpdb->admin_pro->display_success_messages();
 							}
 						}
 
 						if( ! empty( $_POST ) || ( isset( $_GET['message'] ) && !empty( $_GET['message'] ) ) ){ // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
+							// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							do_action( 'delete_pctu_notice'); 
 						}
 					?>

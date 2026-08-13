@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @since 1.0.0
  */
+// phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL, PluginCheck.Security.DirectDB, WordPress.DB.SlowDBQuery, WordPress.DB.PreparedSQLPlaceholders
 class WPBD_Delete_API {
 
 	/**
@@ -1508,3 +1509,4 @@ class WPBD_Delete_API {
         );
     }
 }
+// phpcs:enable

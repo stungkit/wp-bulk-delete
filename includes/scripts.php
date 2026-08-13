@@ -33,7 +33,7 @@ function wpbd_enqueue_admin_scripts( $hook ) {
 		wp_localize_script('wp-bulk-delete', 'wpBulkDeleteData', array( 'siteUrl' => get_site_url(), 'ajaxUrl' => admin_url('admin-ajax.php') ) );
 		wp_enqueue_script( 'wp-bulk-delete' );
 		
-		wp_register_script( 'wpbd-progress', $js_dir . 'wpbd-progress.js', array('jquery'), WPBD_VERSION );
+		wp_register_script( 'wpbd-progress', $js_dir . 'wpbd-progress.js', array('jquery'), WPBD_VERSION, true );
 		wp_localize_script( 'wpbd-progress', 'wpbdProgressData', array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'wpbd_ajax_nonce' )

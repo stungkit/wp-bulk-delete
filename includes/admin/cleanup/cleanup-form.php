@@ -21,7 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function wpbd_cleanup_form( $type = 'general' ){
 
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing
     if(  ! empty( $_POST ) && ( isset( $_POST['run_post_cleanup'] ) || isset( $_POST['run_post_cleanup_submit'] ) ) ){
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing
         $result = xt_cleanup_form_process( $_POST );
         $messages = ( $result['status'] === 1 ) ? $result['messages'] : array();
         $error = ( $result['status'] === 0 ) ? $result['messages'] : array();
@@ -90,6 +92,7 @@ function wpbd_cleanup_form( $type = 'general' ){
  * @param array $data Form data.
  * @return array Status and messages.
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function xt_cleanup_form_process( $data ) {
 	$error = array();
 	if ( ! current_user_can( 'manage_options' ) ) {

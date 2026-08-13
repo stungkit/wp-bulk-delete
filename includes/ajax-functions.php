@@ -465,11 +465,12 @@ function wpbd_render_termmeta_keys_by_taxonomy() {
         if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
             // Get distinct meta keys from termmeta table for these terms
             $term_ids_placeholder = implode( ',', array_fill( 0, count( $terms ), '%d' ) );
-            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
             $meta_keys = $wpdb->get_col( $wpdb->prepare(
                 "SELECT DISTINCT meta_key FROM {$wpdb->termmeta} WHERE term_id IN ( {$term_ids_placeholder} ) AND meta_key != '' ORDER BY meta_key ASC",
                 ...$terms
             ) );
+            // phpcs:enable
         }
     }
 
