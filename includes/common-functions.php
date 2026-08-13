@@ -202,7 +202,7 @@ function wpbd_save_scheduled_delete($data){
 		}
 		$data['wpbd_scheduled_id'] = $insert;
 		update_post_meta( $insert, 'delete_options', $data );
-		$scheduled = wp_schedule_single_event($cron_time, 'wpbd_run_scheduled_delete', array('post_id' => $insert ) );
+		$scheduled = wp_schedule_single_event($cron_time, 'wpbd_run_scheduled_delete', array( (int) $insert ) );
 	} else {
 		$insert_args = array(
 			'post_type'   => 'wpbd_scheduled',
@@ -219,7 +219,7 @@ function wpbd_save_scheduled_delete($data){
 		}
 		$data['wpbd_scheduled_id'] = $insert;
 		update_post_meta( $insert, 'delete_options', $data );
-		$scheduled = wp_schedule_event( $cron_time, $delete_frequency, 'wpbd_run_scheduled_delete', array('post_id' => $insert));
+		$scheduled = wp_schedule_event( $cron_time, $delete_frequency, 'wpbd_run_scheduled_delete', array( (int) $insert ) );
 	}
 	if( $scheduled) {
 		return  array(
